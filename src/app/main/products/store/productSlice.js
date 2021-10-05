@@ -3,59 +3,62 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import ApiService from 'app/services/api/';
 import { currencyString } from 'app/utils/formatter/currencyBrl';
 
-export const getOne = createAsyncThunk('product/getOne', async (id, { dispatch }) => {
-	const response = await ApiService.doGet(`/products/${id}`);
-	if (!response.success) {
-		return response.data;
-	}
-	const { product } = await response.data;
-	const { price } = product;
+export const getOne = createAsyncThunk('product/getOne', async (uid, { dispatch }) => {
+	const response = await ApiService.doGet(`/message/${uid}`);
+	// TODO Create getOne BackENd or  Compare uid
+	// const response = await ApiService.doGet(`/messages/06758592-70a0-471e-bf42-e3da41792586`);
 
-	const parsePrice = `${currencyString.format(price)}`;
+	// if (!response.success) {
+	// 	return response.data;
+	// }
+	const { product } = await response;
+	// const { price } = product;
 
-	return { ...product, price: parsePrice };
+	// const parsePrice = `${currencyString.format(price)}`;
+
+	return { ...product }; // , price: parsePrice
 });
 
 export const saveOne = createAsyncThunk('product/saveOne', async (data, { dispatch }) => {
 	const request = { ...data };
-	request.price = parseFloat(data.price);
+	// request.price = parseFloat(data.price);
 
 	const response = await ApiService.doPost('/products', request);
-	if (!response.success) {
-		dispatch(updateResponse(response.data));
+	if (!response) {
+		dispatch(updateResponse(response));
 		return data;
 	}
-	const { product } = await response.data;
+	const { product } = await response;
 
-	dispatch(getOne(product.id));
+	dispatch(getOne(product.uid));
 
 	return { ...data, message: response.message, success: response.success };
 });
 
-export const updateOne = createAsyncThunk('product/updateOne', async ({ data, id }, { dispatch, getState }) => {
+export const updateOne = createAsyncThunk('product/updateOne', async ({ data, uid }, { dispatch, getState }) => {
 	const request = { ...data };
-	request.price = parseFloat(data.price);
+	/// request.price = parseFloat(data.price);
 
-	const response = await ApiService.doPut(`/products/${id}`, request);
+	const response = await ApiService.doPut(`/products/${uid}`, request);
 	const oldState = getState().product;
 
-	if (!response.success) {
+	if (!response) {
 		dispatch(updateResponse(response.data));
-		return { ...data, id, loading: false };
+		return { ...data, uid, loading: false };
 	}
 
-	dispatch(getOne(id));
+	dispatch(getOne(uid));
 
 	return { ...oldState, message: response.message, success: response.success };
 });
 
 const initialState = {
-	success: false,
-	message: '',
-	errorCode: '',
+	// success: false,
+	// message: '',
+	// errorCode: '',
 	loading: false,
 	title: '',
-	description: '',
+	detail: '',
 	price: ''
 };
 
@@ -67,14 +70,14 @@ const productSlice = createSlice({
 			reducer: (state, action) => action.payload,
 			prepare: event => ({
 				payload: {
-					id: 'new',
+					uid: 'new',
 					title: '',
-					description: '',
+					detail: '',
 					price: '',
-					success: false,
-					loading: false,
-					message: '',
-					errorCode: ''
+					// success: false,
+					loading: false
+					// message: '',
+					// errorCode: ''
 				}
 			})
 		},

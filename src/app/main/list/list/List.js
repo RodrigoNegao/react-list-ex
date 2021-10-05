@@ -8,7 +8,7 @@ import currencyFormatter from 'app/utils/formatter/currencyBrl';
 import TableComponent from 'app/fuse-layouts/shared-components/table';
 import PageCardedHeader from 'app/fuse-layouts/shared-components/page-carded-header/PageCardedHeader';
 
-import { getAll, selectAll } from '../store/productsSlice';
+import { getAll, selectAll } from '../store/listsSlice';
 
 const columns = [
 	{
@@ -19,34 +19,34 @@ const columns = [
 		sort: true
 	},
 	{
-		id: 'detail',
+		id: 'description',
 		align: 'left',
 		disablePadding: false,
 		label: 'Descrição',
 		sort: false
+	},
+	{
+		id: 'price',
+		align: 'left',
+		disablePadding: false,
+		label: 'Preço',
+		sort: false
 	}
-	// {
-	// 	id: 'price',
-	// 	align: 'left',
-	// 	disablePadding: false,
-	// 	label: 'Preço',
-	// 	sort: false
-	// }
 ];
 
-export default function Products() {
+export default function Lists() {
 	const history = useHistory();
 	const dispatch = useDispatch();
-	const productsRedux = useSelector(selectAll);
+	const listsRedux = useSelector(selectAll);
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false);
 
 	function handleClick(value) {
-		history.push(`/products/${value.uid}`);
+		history.push(`/list/${value.id}`);
 	}
 
 	function handleClickNew() {
-		history.push(`/products/new`);
+		history.push(`/list/new`);
 	}
 
 	useEffect(() => {
@@ -55,19 +55,19 @@ export default function Products() {
 	}, []);
 
 	useEffect(() => {
-		if (productsRedux) {
+		if (listsRedux) {
 			setLoading(false);
-			if (productsRedux.length) {
-				const parseProducts = productsRedux.map(item => {
+			if (listsRedux.length) {
+				const parseLists = listsRedux.map(item => {
 					return {
-						...item
-						// price: currencyFormatter.format(item.price)
+						...item,
+						price: currencyFormatter.format(item.price)
 					};
 				});
-				setData(parseProducts);
+				setData(parseLists);
 			}
 		}
-	}, [productsRedux]);
+	}, [listsRedux]);
 
 	return (
 		<FusePageCarded
@@ -76,7 +76,7 @@ export default function Products() {
 				contentCard: 'overflow-hidden rounded-t-12',
 				header: 'min-h-72 h-72 sm:h-136 sm:min-h-136 white'
 			}}
-			header={<PageCardedHeader title="Produtos" buttonTitle="ADICIONAR NOVO" buttonAction={handleClickNew} />}
+			header={<PageCardedHeader title="Lista" buttonTitle="ADICIONAR ITEM" buttonAction={handleClickNew} />}
 			content={<TableComponent columns={columns} data={data} action={handleClick} />}
 			innerScroll
 		/>

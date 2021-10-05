@@ -38,6 +38,14 @@ const navigationConfig = [
 				type: 'item',
 				icon: 'add',
 				url: '/categories'
+			},
+			{
+				id: 'list-component',
+				title: 'List',
+				translate: 'List',
+				type: 'item',
+				icon: 'add',
+				url: '/list'
 			}
 		]
 	}

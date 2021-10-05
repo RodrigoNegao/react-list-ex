@@ -67,11 +67,13 @@ class Api extends FuseUtils.EventEmitter {
 		try {
 			const response = await axios.get(url);
 
-			if (response.data.success === true) {
-				return response.data;
-			}
+			return response.data;
 
-			return 'ERRO';
+			// if (response.data.success === true) {
+			// 	return response.data;
+			// }
+
+			// return 'ERRO';
 		} catch (error) {
 			return error.response;
 		}

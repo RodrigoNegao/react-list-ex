@@ -2,14 +2,16 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import ApiService from 'app/services/api';
 
 export const getAll = createAsyncThunk('products/getProducts', async () => {
-	const response = await ApiService.doGet('/products');
-	const data = await response.data;
+	// const response = await ApiService.doGet('/products');
+	const response = await ApiService.doGet(`/messages/06758592-70a0-471e-bf42-e3da41792586`);
 
-	return data.products;
+	const data = await response;
+
+	return data;
 });
 
 const adapter = createEntityAdapter({
-	selectId: product => product.id
+	selectId: product => product.uid
 });
 
 export const { selectAll, selectById } = adapter.getSelectors(state => state.products);

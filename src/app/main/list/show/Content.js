@@ -15,13 +15,13 @@ import objectsKeysEquals from 'app/utils/validations/objectsKeysEquals';
 import ButtonDefault from 'app/fuse-layouts/shared-components/button-default/ButtonDeafault';
 import { Grid, InputAdornment, MenuItem } from '@material-ui/core';
 
-import { saveOne, newData, getOne, updateOne, updateResponse, updateLoading } from '../store/productSlice';
+import { saveOne, newData, getOne, updateOne, updateResponse, updateLoading } from '../store/listSlice';
 
 function Content() {
 	const dispatch = useDispatch();
 	const routeParams = useParams();
 	const history = useHistory();
-	const productRedux = useSelector(({ product }) => product);
+	const listRedux = useSelector(({ list }) => list);
 
 	const [contents, setContents] = useState([]);
 	const [selectedContents, setSelectedContents] = useState([]);
@@ -30,12 +30,12 @@ function Content() {
 
 	useDeepCompareEffect(() => {
 		function updateState() {
-			const { uid } = routeParams;
-			if (uid === 'new') {
+			const { id } = routeParams;
+			if (id === 'new') {
 				dispatch(newData());
 			} else {
 				setLoading(true);
-				dispatch(getOne(uid));
+				dispatch(getOne(id));
 			}
 		}
 
@@ -43,12 +43,12 @@ function Content() {
 	}, [dispatch, routeParams]);
 
 	useEffect(() => {
-		if (productRedux) {
+		if (listRedux) {
 			if (loading) {
-				setLoading(productRedux.loading);
+				setLoading(listRedux.loading);
 			}
 		}
-	}, [productRedux]);
+	}, [listRedux]);
 
 	useEffect(() => {
 		function clear() {
@@ -57,16 +57,16 @@ function Content() {
 
 			if (id === 'new') {
 				dispatch(newData());
-				history.push('/products/new');
+				history.push('/list/new');
 			} else {
 				dispatch(updateResponse({ message: '', success: false }));
 			}
 		}
 
-		if (productRedux?.message && !productRedux?.success) {
+		if (listRedux?.message && !listRedux?.success) {
 			dispatch(
 				showMessage({
-					message: productRedux?.message,
+					message: listRedux?.message,
 					autoHideDuration: 6000,
 					anchorOrigin: {
 						vertical: 'top',
@@ -78,10 +78,10 @@ function Content() {
 
 			clear();
 		}
-		if (productRedux?.message && productRedux?.success) {
+		if (listRedux?.message && listRedux?.success) {
 			dispatch(
 				showMessage({
-					message: productRedux?.message,
+					message: listRedux?.message,
 					autoHideDuration: 6000,
 					anchorOrigin: {
 						vertical: 'top',
@@ -93,7 +93,7 @@ function Content() {
 
 			clear();
 		}
-	}, [productRedux.success, productRedux.message]);
+	}, [listRedux.success, listRedux.message]);
 
 	function canBeSubmitted(modal) {
 		if (modal) {
@@ -102,9 +102,9 @@ function Content() {
 			if (modal === true) {
 				diff = isFormValid;
 			} else {
-				diff = objectsKeysEquals(modal, productRedux);
+				diff = objectsKeysEquals(modal, listRedux);
 			}
-			const diffContents = productRedux?.contents?.length !== selectedContents.length;
+			const diffContents = listRedux?.contents?.length !== selectedContents.length;
 
 			if ((diff || diffContents) && !isFormValid) {
 				setIsFormValid(true);
@@ -124,8 +124,8 @@ function Content() {
 		setLoading(true);
 		dispatch(updateLoading(true));
 
-		if (productRedux?.id !== 'new') {
-			dispatch(updateOne({ data: modal, id: productRedux?.id }));
+		if (listRedux?.id !== 'new') {
+			dispatch(updateOne({ data: modal, id: listRedux?.id }));
 		} else {
 			dispatch(saveOne(modal));
 		}
@@ -142,7 +142,7 @@ function Content() {
 		setIsFormValid(true);
 	}
 
-	if (!productRedux?.id && loading) {
+	if (!listRedux?.id && loading) {
 		return <FuseLoading />;
 	}
 
@@ -160,7 +160,7 @@ function Content() {
 						label="Nome"
 						type="text"
 						name="title"
-						value={productRedux.title}
+						value={listRedux.title}
 						variant="outlined"
 						validations={{ minLength: 3 }}
 						validationErrors={{ minLength: 'Preencha o campo com o nome' }}
@@ -172,8 +172,8 @@ function Content() {
 						className="mb-16 w-full"
 						label="Descrição"
 						type="text"
-						name="detail"
-						value={productRedux.description}
+						name="description"
+						value={listRedux.description}
 						variant="outlined"
 						validations={{ minLength: 3 }}
 						validationErrors={{ minLength: 'Preencha o campo com a descrição' }}
@@ -181,12 +181,12 @@ function Content() {
 						required
 					/>
 
-					{/* <TextFieldFormsy
+					<TextFieldFormsy
 						className="mb-16 w-full"
 						label="Preço"
 						type="text"
 						name="price"
-						value={productRedux.price}
+						value={listRedux.price}
 						mask={['9,99', '99,99', '999,99', '9.999,99']}
 						validations={{
 							matchRegexp: /^(\d{0,1}\.?\d{1,3},\d{2}$)/
@@ -198,7 +198,7 @@ function Content() {
 						variant="outlined"
 						fullWidth
 						required
-					/> */}
+					/>
 
 					{/* <SelectFormsy
 						className="mb-16 w-full"
