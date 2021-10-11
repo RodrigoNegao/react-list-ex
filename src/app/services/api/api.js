@@ -63,6 +63,7 @@ class Api extends FuseUtils.EventEmitter {
 		});
 	};
 
+	// TODO Edited
 	doGet = async url => {
 		try {
 			const response = await axios.get(url);

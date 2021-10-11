@@ -7,6 +7,8 @@ export const getAll = createAsyncThunk('products/getProducts', async () => {
 
 	const data = await response;
 
+	// console.log('2', data);
+
 	return data;
 });
 

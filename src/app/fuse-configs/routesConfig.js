@@ -11,6 +11,7 @@ import ForgotPasswordConfig from 'app/main/forgot-password/ForgotPasswordConfig'
 import ProductsConfig from 'app/main/products/ProductsConfig';
 import ListConfig from 'app/main/list/ListConfig';
 import CategoriesConfig from 'app/main/categories/CategoriesConfig';
+import MessagesConfig from 'app/main/message/MessagesConfig';
 
 const routeConfigs = [
 	ExampleConfig,
@@ -22,7 +23,8 @@ const routeConfigs = [
 	HomeConfig,
 	ProductsConfig,
 	ListConfig,
-	CategoriesConfig
+	CategoriesConfig,
+	MessagesConfig
 ];
 
 const routes = [
@@ -31,7 +33,8 @@ const routes = [
 		path: '/',
 		// component: () => <Redirect to="/home" />
 		// component: () => <Redirect to="/list" />
-		component: () => <Redirect to="/product" />
+		// component: () => <Redirect to="/product" />
+		component: () => <Redirect to="/messages" />
 	}
 ];
 
