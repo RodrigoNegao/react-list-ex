@@ -11,7 +11,8 @@ import ForgotPasswordConfig from 'app/main/forgot-password/ForgotPasswordConfig'
 import ProductsConfig from 'app/main/products/ProductsConfig';
 import ListConfig from 'app/main/list/ListConfig';
 import CategoriesConfig from 'app/main/categories/CategoriesConfig';
-import MessagesConfig from 'app/main/message/MessagesConfig';
+// import MessagesConfig from 'app/main/message/MessagesConfig';
+import MessagesConfig from 'app/main/messages/MessagesConfig';
 
 const routeConfigs = [
 	ExampleConfig,

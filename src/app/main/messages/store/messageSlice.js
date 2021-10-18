@@ -1,51 +1,32 @@
 /* eslint-disable camelcase */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import ApiService from 'app/services/api/';
-import { currencyString } from 'app/utils/formatter/currencyBrl';
 
 export const getOne = createAsyncThunk('message/getOne', async (uid, { dispatch }) => {
 	const response = await ApiService.doGet(`/message/${uid}`);
-	// TODO Create getOne BackENd or  Compare uid
-	// const response = await ApiService.doGet(`/messages/06758592-70a0-471e-bf42-e3da41792586`);
+	const message = await response;
 
-	// if (!response.success) {
-	// 	return response.data;
-	// }
-	// const { message } = await response;
-	const data = await response;
-	// console.log('getOne', data);
-	// const { price } = message;
-
-	// const parsePrice = `${currencyString.format(price)}`;
-
-	// return { ...message }; // , price: parsePrice
-	return { ...data };
+	return { ...message };
 });
 
 export const saveOne = createAsyncThunk('message/saveOne', async (data, { dispatch }) => {
-	const request = { ...data };
-	// request.price = parseFloat(data.price);
+	const request = { ...data }; // , uid:
 
 	const response = await ApiService.doPost('/message', request);
 	if (response.error) {
-		dispatch(updateResponse(response));
+		dispatch(updateResponse(response.data));
 		return data;
 	}
-	// const { message } = await response;
 
-	// dispatch(getOne(message.uid));
-
-	return { ...data, message: 'SaveOne Ok', success: response.success };
+	return { ...data, message: 'Ta salvo Oxi', success: 'Ok' };
 });
 
 export const updateOne = createAsyncThunk('message/updateOne', async ({ data, uid }, { dispatch, getState }) => {
 	const request = { ...data };
-	console.log('request UpdatOne>>>>>>>>', request);
-	// request.price = parseFloat(data.price);
+	console.log(request);
 
 	const response = await ApiService.doPut(`/message/${uid}`, request);
 	const oldState = getState().message;
-	console.log('updateOne>>>>>>>>>>>', oldState);
 
 	if (response.error) {
 		dispatch(updateResponse(response.data));
@@ -54,22 +35,23 @@ export const updateOne = createAsyncThunk('message/updateOne', async ({ data, ui
 
 	dispatch(getOne(uid));
 
-	return { ...oldState, message: 'Update ok', success: 'Success' };
+	return { ...oldState, message: 'Ta salvo Oxi', success: 'Success' };
 });
 
-export const deleteOne = createAsyncThunk('note/deleteOne', async ({ data, uid }, { dispatch, getState }) => {
+export const deleteOne = createAsyncThunk('message/deleteOne', async ({ data, uid }, { dispatch, getState }) => {
 	const request = { ...data };
 	console.log(request);
 
-	const response = await ApiService.doDelete(`/notes/${uid}`);
+	const response = await ApiService.doDelete(`/message/${uid}`);
 
-	return { message: 'Great job', success: 'Success' };
+	return { message: 'Ta salvo Oxi', success: 'Success' };
 });
 
 const initialState = {
+	message: '',
 	loading: false,
 	title: '',
-	detail: ''
+	description: ''
 };
 
 const messageSlice = createSlice({
@@ -82,12 +64,9 @@ const messageSlice = createSlice({
 				payload: {
 					uid: 'new',
 					title: '',
-					detail: '',
-					price: '',
-					// success: false,
-					loading: false
-					// message: '',
-					// errorCode: ''
+					description: '',
+					loading: false,
+					message: ''
 				}
 			})
 		},

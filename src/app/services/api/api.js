@@ -84,11 +84,13 @@ class Api extends FuseUtils.EventEmitter {
 		try {
 			const response = await axios.post(url, data);
 
-			if (response.data.success === true) {
-				return response.data;
-			}
+			return response.data;
 
-			return 'erro';
+			// if (response.data.success === true) {
+			// 	return response.data;
+			// }
+
+			// return 'erro';
 		} catch (error) {
 			return { data: error.response.data, status: error.response.status };
 		}
@@ -97,12 +99,14 @@ class Api extends FuseUtils.EventEmitter {
 	doPut = async (url, data) => {
 		try {
 			const response = await axios.put(url, data);
+			console.log('axios put', response.data);
+			return response.data;
 
-			if (response.data.success === true) {
-				return response.data;
-			}
+			// if (response.data.success === true) {
+			// 	return response.data;
+			// }
 
-			return 'erro';
+			// return 'erro';
 		} catch (error) {
 			return { data: error.response.data, status: error.response.status };
 		}
@@ -130,11 +134,13 @@ class Api extends FuseUtils.EventEmitter {
 		try {
 			const response = await axios.delete(url);
 
-			if (response.data.success === true) {
-				return response.data;
-			}
+			return response.data;
 
-			return 'erro';
+			// if (response.data.success === true) {
+			// 	return response.data;
+			// }
+
+			// return 'erro';
 		} catch (error) {
 			return error.response;
 		}
