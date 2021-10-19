@@ -99,7 +99,7 @@ class Api extends FuseUtils.EventEmitter {
 	doPut = async (url, data) => {
 		try {
 			const response = await axios.put(url, data);
-			console.log('axios put', response.data);
+			// console.log('axios put', response.data);
 			return response.data;
 
 			// if (response.data.success === true) {
